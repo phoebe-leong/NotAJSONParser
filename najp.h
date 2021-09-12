@@ -81,6 +81,31 @@ void open(const char file[], najp* object) {
             fprintf(object->json, "\t\"%s\" : %d", title, value);
         return NAJP_OK;
     }
+
+        int addelement(const char title[], bool value, najp* object) {
+        if (object->d.amountofeverything >= 999)
+            return NAJP_ELEMENT_LIMIT_REACHED;
+        for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+            if (title == object->d.titles[i])
+                return NAJP_TITLE_ALREADY_IN_USE;
+        }
+        object->d.titles[object->d.amountofeverything + 1] = title;
+        object->d.amountofeverything++;
+        if (!object->d.istart && !object->d.isubclasstart)
+            fprintf(object->json, ",\n");
+        if (object->d.isubclass)
+            for (int i = 0; i != object->d.parentsubclasses + 1; i++)
+                fprintf(object->json, "\t");
+
+        if (object->d.istart)
+            object->d.istart = false;
+        if (object->d.isubclass && object->d.isubclasstart)
+            object->d.isubclasstart = false;
+
+            fprintf(object->json, "\t\"%s\" : ", title);
+            fprintf(object->json, value ? "true" : "false");
+        return NAJP_OK;
+    }
 #else
     int addelement(const char title[], const char value[], bool valueistring, najp* object) {
         if (object->d.amountofeverything >= 999)

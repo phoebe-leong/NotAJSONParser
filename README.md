@@ -36,7 +36,7 @@ int main() {
   najp_close(&n);
 }
 ```
-Output for both (with better spacing, GitHub formatting is weird 😔):
+Output for both (with better spacing, GitHub formatting is weird 😔 ):
 
 ```json
 {

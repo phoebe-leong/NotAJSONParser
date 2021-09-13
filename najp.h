@@ -23,7 +23,7 @@ typedef struct {
     bool valueistring;
 } najp_array;
 
-void open(const char file[], najp* object) {
+void najp_open(const char file[], najp* object) {
     object->json = fopen(file, "w");
 
     fprintf(object->json, "{\n");
@@ -34,7 +34,7 @@ void open(const char file[], najp* object) {
 
 /* *cries* Dennis what were you thinking?? Not adding overloaded functions to C!! :0 */
 #ifdef __cplusplus
-    int addelement(const char title[], const char value[], najp* object) {
+    int najp_addelement(const char title[], const char value[], najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -58,7 +58,7 @@ void open(const char file[], najp* object) {
         return NAJP_OK;
     }
 
-    int addelement(const char title[], int value, najp* object) {
+    int najp_addelement(const char title[], int value, najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -82,7 +82,7 @@ void open(const char file[], najp* object) {
         return NAJP_OK;
     }
 
-        int addelement(const char title[], bool value, najp* object) {
+        int najp_addelement(const char title[], bool value, najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -107,7 +107,7 @@ void open(const char file[], najp* object) {
         return NAJP_OK;
     }
 #else
-    int addstrelement(const char title[], const char value[], najp* object) {
+    int najp_addstrelement(const char title[], const char value[], najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -131,7 +131,7 @@ void open(const char file[], najp* object) {
         return NAJP_OK;
     }
 
-    int addnumelement(const char title[], const int value, najp* object) {
+    int najp_addnumelement(const char title[], const int value, najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -155,7 +155,7 @@ void open(const char file[], najp* object) {
         return NAJP_OK;
     }
 
-    int addboolelement(const char title[], const bool value, najp* object) {
+    int najp_addboolelement(const char title[], const bool value, najp* object) {
         if (object->d.amountofeverything >= 999)
             return NAJP_ELEMENT_LIMIT_REACHED;
         for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
@@ -181,7 +181,7 @@ void open(const char file[], najp* object) {
     }
 #endif
 
-int addarray(const char title[], najp_array values[], const size_t valuesamt, najp* object) {
+int najp_addarray(const char title[], najp_array values[], const size_t valuesamt, najp* object) {
     for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
         if (title == object->d.titles[i])
             return NAJP_TITLE_ALREADY_IN_USE;
@@ -219,7 +219,7 @@ int addarray(const char title[], najp_array values[], const size_t valuesamt, na
     return NAJP_OK;
 }
 
-int addsubclass(const char title[], najp* object) {
+int najp_addsubclass(const char title[], najp* object) {
     for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++)
         if (title == object->d.titles[i])
             return NAJP_TITLE_ALREADY_IN_USE;
@@ -238,7 +238,7 @@ int addsubclass(const char title[], najp* object) {
     return NAJP_OK;
 }
 
-void closesubclass(najp* object) {
+void najp_closesubclass(najp* object) {
     fprintf(object->json, "\n");
     for (int i = 0; i != object->d.parentsubclasses; i++)
         fprintf(object->json, "\t");
@@ -247,7 +247,7 @@ void closesubclass(najp* object) {
     object->d.parentsubclasses--;
 }
 
-void close(const najp* object) {
+void najp_close(const najp* object) {
     fprintf(object->json, "\n}");
     fclose(object->json);
 }

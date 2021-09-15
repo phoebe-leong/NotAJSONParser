@@ -2,6 +2,17 @@
 A JSON generator (with console output) written in C compatible with C++.  
 I was going to write a JSON parser to go along with it, but I ended up just giving up.
 
+This branch would be good for developing, but is not actually intended to be used in production.  
+Having the console output to analyse is much more handy in comparison to this:
+```c
+if (najp_addelement("ElementTitle", "ElementValue", &n) != NAJP_OK) {
+	printf("Didn't work\n");
+} else {
+	printf("Worked\n");
+}
+```
+The two branches function the same, one simply outputs its status to the console, and the other doesn't.
+
 ## Examples
 
 C code:

@@ -47,7 +47,7 @@ int main() {
   najp_close(&n);
 }
 ```
-Output for both:
+JSON Output for both:
 
 ```json
 {
@@ -60,3 +60,15 @@ Output for both:
 		"C"
 	]
 }
+```
+Console output:
+```
+$   F͟i͟l͟e͟ ͟"͟t͟e͟s͟t͟.͟j͟s͟o͟n͟"͟ ͟o͟p͟e͟n͟e͟d͟ ͟.͟.͟
+$ ✓ String element "Name" finished with no errors
+$ ✓ Integer element "Age" finished with no errors
+$ ✓ Array "Programming Languages Learnt" finished with no errors
+$   F͟i͟l͟e͟ ͟c͟l͟o͟s͟e͟d͟ ͟.͟.͟
+```
+
+Errors will be displayed in red, and successes will be displayed in green.  
+Opening and closing of files is coloured normally and underlined.

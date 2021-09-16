@@ -1,6 +1,5 @@
 # NotAJSONParser - with handy output to the console
 A JSON generator (with console output) written in C compatible with C++.  
-I was going to write a JSON parser to go along with it, but I ended up just giving up.
 
 This branch would be good for developing, but is not actually intended to be used in production.  
 Having the console output to analyse is much more handy in comparison to this:

@@ -13,6 +13,8 @@ if (najp_addelement("ElementTitle", "ElementValue", &n) != NAJP_OK) {
 ```
 The two branches function the same, one simply outputs its status to the console, and the other doesn't.
 
+#### Note: The console output will only work on POSIX machines.
+
 ## Examples
 
 C code:

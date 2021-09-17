@@ -69,7 +69,7 @@ Console output:
 $   File "test.json" opened ..
 $ ✓ String element "Name" finished with no errors
 $ ✓ Integer element "Age" finished with no errors
-$ 
+$ ✗ Integer element "Age" finished with one error: NAJP_TITLE_ALREADY_IN_USE
 $ ✓ Array "Programming Languages Learnt" finished with no errors
 $   File closed ..
 ```

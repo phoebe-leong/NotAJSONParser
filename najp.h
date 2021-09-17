@@ -1,7 +1,7 @@
+#pragma once
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#pragma once
 
 #define NAJP_OK 0
 #define NAJP_TITLE_ALREADY_IN_USE -1

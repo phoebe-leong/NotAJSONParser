@@ -25,6 +25,7 @@ int main() {
   najp_open("test.json", &n);
   najp_addstrelement("Name", "Phoebe", &n);
   najp_addnumelement("Age", 13, &n); /* This also works with booleans */
+  najp_addnumelement("Age", 14, &n);
   
   najp_array languages[] = {{"HTML", true}, {"CSS", true}, {"C++", true}, {"C", true}};
   najp_addarray("Programming Languages Learnt", languages, sizeof(languages) / sizeof(languages[0]), &n);
@@ -41,6 +42,7 @@ int main() {
   najp_open("test.json", &n);
   najp_addelement("Name", "Phoebe", &n);
   najp_addelement("Age", 13, &n); /* Making use of overloaded functions */
+  najp_addelement("Age", 14, &n);
   
   najp_array languages[] = {{"HTML", true}, {"CSS", true}, {"C++", true}, {"C", true}};
   najp_addarray("Programming Languages Learnt", languages, sizeof(languages) / sizeof(languages[0]), &n);
@@ -64,11 +66,12 @@ JSON Output for both:
 ```
 Console output:
 ```
-$   F͟i͟l͟e͟ ͟"͟t͟e͟s͟t͟.͟j͟s͟o͟n͟"͟ ͟o͟p͟e͟n͟e͟d͟ ͟.͟.͟
+$   File "test.json" opened ..
 $ ✓ String element "Name" finished with no errors
 $ ✓ Integer element "Age" finished with no errors
+$ 
 $ ✓ Array "Programming Languages Learnt" finished with no errors
-$   F͟i͟l͟e͟ ͟c͟l͟o͟s͟e͟d͟ ͟.͟.͟
+$   File closed ..
 ```
 
 Errors will be displayed in red, and successes will be displayed in green.  

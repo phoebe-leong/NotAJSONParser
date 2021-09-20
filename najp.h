@@ -104,6 +104,30 @@ void najp_open(const char file[], najp* object) {
             fprintf(object->json, value ? "true" : "false");
         return NAJP_OK;
     }
+
+    int najp_addelement(const char title[], najp* object) {
+        if (object->d.objects >= NAJP_LIMIT)
+            return NAJP_ELEMENT_LIMIT_REACHED;
+        for (int i = 0; i < sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+            if (title == object->d.titles[i])
+                return NAJP_TITLE_ALREADY_IN_USE;
+        }
+        object->d.titles[object->d.objects] = title;
+        object->d.objects++;
+        if (object->d.comma)
+            fprintf(object->json, ",\n");
+        else object->d.comma = true;
+        if (object->d.isubclass) {
+            object->d.isubclasstart = false;
+        
+            for (int i = 0; i != object->d.parentsubclasses; i++) {
+                fprintf(object->json, "\t");
+            }
+        }
+
+        fprintf(object->json, "\t\"%s\" : null", title);
+        return NAJP_OK;
+    }
 #else
     int najp_addstrelement(const char title[], const char value[], najp* object) {
         if (object->d.objects >= NAJP_LIMIT)
@@ -177,6 +201,28 @@ void najp_open(const char file[], najp* object) {
 
         fprintf(object->json, "\t\"%s\" : ", title);
         fprintf(object->json, value ? "true" : "false");
+        return NAJP_OK;
+    }
+
+    int najp_addnullelement(const char title[], najp* object) {
+        if (object->d.objects >= NAJP_LIMIT)
+            return NAJP_ELEMENT_LIMIT_REACHED;
+        for (int i = 0; i < sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+            if (title == object->d.titles[i])
+                return NAJP_TITLE_ALREADY_IN_USE;
+        }
+        object->d.titles[object->d.objects] = title;
+        object->d.objects++;
+        if (object->d.comma)
+            fprintf(object->json, ",\n");
+        else object->d.comma = true;
+        if (object->d.isubclass) {
+            object->d.isubclasstart = false;
+            for (int i = 0; i != object->d.parentsubclasses; i++) {
+                fprintf(object->json, "\t");
+            }
+        }
+        fprintf(object->json, "\"%s\" : null", title);
         return NAJP_OK;
     }
 #endif

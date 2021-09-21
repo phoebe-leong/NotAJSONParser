@@ -3,9 +3,8 @@ A JSON generator written in C.
 I was going to write a JSON parser to go along with it, but I ended up just giving up.  
 Check out [this other branch](https://github.com/phoebe-leong/NotAJSONParser/tree/console_out) that includes console output for easier debugging.
 
-## Examples
+## Example
 
-C code:
 ```c
 #include "najp.h"
 
@@ -21,23 +20,8 @@ int main() {
   najp_close(&n);
 }
 ```
-C++ code:
-```cpp
-#include "najp.h"
 
-najp n;
-int main() {
-  najp_open("test.json", &n);
-  najp_addelement("Name", "Phoebe", &n);
-  najp_addelement("Age", 13, &n); /* Making use of overloaded functions */
-  
-  najp_array languages[] = {{"HTML", true}, {"CSS", true}, {"C++", true}, {"C", true}};
-  najp_addarray("Programming Languages Learnt", languages, sizeof(languages) / sizeof(languages[0]), &n);
-  
-  najp_close(&n);
-}
-```
-Output for both:
+Output:
 
 ```json
 {

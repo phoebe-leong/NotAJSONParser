@@ -9,6 +9,7 @@
 #define NAJP_OK 0
 #define NAJP_TITLE_ALREADY_IN_USE -1
 #define NAJP_ELEMENT_LIMIT_REACHED -2
+#define NAJP_SUBCLASS_NOT_CURRENT -3
 
 #define NAJP_LIMIT 10000
 
@@ -186,8 +187,11 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
         if (i != 0) {
             fprintf(object->json, ",\n");
         }
+        
         if (object->d.isubclass) {
-            fprintf(object->json, "\t");
+            for (int j = 0; j != object->d.parentsubclasses; j++) {
+                fprintf(object->json, "\t");
+            }
         }
         if (!values[i].valueistring) {
             fprintf(object->json, "\t\t%s", values[i].value);
@@ -228,7 +232,11 @@ int najp_addsubclass(const char title[], najp* object) {
     return NAJP_OK;
 }
 
-void najp_closesubclass(najp* object) {
+int najp_closesubclass(najp* object) {
+    if (!object->d.isubclass) {
+        return NAJP_SUBCLASS_NOT_CURRENT;
+    }
+
     if (!object->d.isubclasstart) {
         fprintf(object->json, "\n");
     }
@@ -239,6 +247,8 @@ void najp_closesubclass(najp* object) {
     object->d.isubclass = false;
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
+
+    return NAJP_OK;
 }
 
 void najp_close(const najp* object) {

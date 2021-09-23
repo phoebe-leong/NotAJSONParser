@@ -224,7 +224,9 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
 
     if (object->d.isubclass) {
         object->d.isubclasstart = false;
-        fprintf(object->json, "\t");
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
     }
     fprintf(object->json, "\t\"%s\" : [\n", title);
 
@@ -232,8 +234,11 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
         if (i != 0) {
             fprintf(object->json, ",\n");
         }
+
         if (object->d.isubclass) {
-            fprintf(object->json, "\t");
+            for (int i = 0; i != object->d.parentsubclasses; i++) {
+                fprintf(object->json, "\t");
+            }
         }
         if (!values[i].valueistring) {
             fprintf(object->json, "\t\t%s", values[i].value);
@@ -242,11 +247,13 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
         }
     }
 
+    fprintf(object->json, "\n");
     if (object->d.isubclass) {
-        fprintf(object->json, "\n\t\t]");
-    } else {
-        fprintf(object->json, "\n\t]");
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
     }
+    fprintf(object->json, "\t]");
 
     sleep(1);
     fprintf(text_green(stdout), "✓ Array \"%s\" finished with no errors\n", title);

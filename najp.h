@@ -94,7 +94,7 @@ int najp_addnumelement(const char title[], const double value, najp* object) {
         object->d.comma = true;
     }
 
-    fprintf(object->json, "\t\"%s\" : %d", title, value);
+    fprintf(object->json, "\t\"%s\" : %f", title, value);
     return NAJP_OK;
 }
 

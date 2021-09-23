@@ -12,7 +12,9 @@ if (najp_addelement("ElementTitle", "ElementValue", &n) != NAJP_OK) {
 ```
 The two branches function the same, one simply outputs its status to the console, and the other doesn't.
 
-#### Note: This branch will only work on POSIX machines.
+#### Notes:
+#### This branch will only work on POSIX machines.
+#### Run ``install.sh`` before first use to ensure that everything works as necessary
 
 ## Example
 

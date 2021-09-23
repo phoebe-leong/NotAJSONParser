@@ -1,6 +1,5 @@
 #pragma once
 #include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 
 #ifdef __cplusplus
@@ -20,14 +19,14 @@ struct najp_data {
 };
 
 typedef struct {
-    FILE* json;
-    struct najp_data d;
-} najp;
-
-typedef struct {
     const char value[101];
     bool valueistring;
 } najp_array;
+
+typedef struct {
+    FILE* json;
+    struct najp_data d;
+} najp;
 
 void najp_open(const char file[], najp* object) {
     object->json = fopen(file, "w");
@@ -39,74 +38,92 @@ void najp_open(const char file[], najp* object) {
 }
 
 int najp_addstrelement(const char title[], const char value[], najp* object) {
-    if (object->d.objects >= NAJP_LIMIT)
+    if (object->d.objects >= NAJP_LIMIT) {
         return NAJP_ELEMENT_LIMIT_REACHED;
-    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
-        if (title == object->d.titles[i])
-            return NAJP_TITLE_ALREADY_IN_USE;
     }
+    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+        if (title == object->d.titles[i]) {
+            return NAJP_TITLE_ALREADY_IN_USE;
+        }
+    }
+
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
-    if (object->d.comma)
+    if (object->d.comma) {
         fprintf(object->json, ",\n");
-    if (object->d.isubclass) {
-        object->d.isubclasstart = false;
-
-        for (int i = 0; i != object->d.parentsubclasses; i++)
-            fprintf(object->json, "\t");
     }
 
-    if (!object->d.comma)
-        object->d.comma = true;
+    if (object->d.isubclass) {
+        object->d.isubclasstart = false;
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
+    }
 
+    if (!object->d.comma) {
+        object->d.comma = true;
+    }
     fprintf(object->json, "\t\"%s\" : \"%s\"", title, value);
     return NAJP_OK;
 }
 
-int najp_addnumelement(const char title[], const int value, najp* object) {
-    if (object->d.objects >= NAJP_LIMIT)
+int najp_addnumelement(const char title[], const double value, najp* object) {
+    if (object->d.objects >= NAJP_LIMIT) {
         return NAJP_ELEMENT_LIMIT_REACHED;
-    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
-        if (title == object->d.titles[i])
-            return NAJP_TITLE_ALREADY_IN_USE;
     }
+    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+        if (title == object->d.titles[i]) {
+            return NAJP_TITLE_ALREADY_IN_USE;
+        }
+    }
+
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
-    if (object->d.comma)
+    if (object->d.comma) {
         fprintf(object->json, ",\n");
-    if (object->d.isubclass) {
-        object->d.isubclasstart = false;
-
-        for (int i = 0; i != object->d.parentsubclasses; i++)
-            fprintf(object->json, "\t");
     }
 
-    if (!object->d.comma)
+    if (object->d.isubclass) {
+        object->d.isubclasstart = false;
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
+    }
+
+    if (!object->d.comma) {
         object->d.comma = true;
+    }
 
     fprintf(object->json, "\t\"%s\" : %d", title, value);
     return NAJP_OK;
 }
 
 int najp_addboolelement(const char title[], const bool value, najp* object) {
-    if (object->d.objects >= NAJP_LIMIT)
+    if (object->d.objects >= NAJP_LIMIT) {
         return NAJP_ELEMENT_LIMIT_REACHED;
-    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
-        if (title == object->d.titles[i])
-            return NAJP_TITLE_ALREADY_IN_USE;
     }
-    object->d.titles[object->d.objects] = title;
-    object->d.objects++;
-    if (object->d.comma)
-        fprintf(object->json, ",\n");
-    if (object->d.isubclass) {
-        object->d.isubclasstart = false;
-        for (int i = 0; i != object->d.parentsubclasses; i++)
-            fprintf(object->json, "\t");
+    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+        if (title == object->d.titles[i]) {
+            return NAJP_TITLE_ALREADY_IN_USE;
+        }
     }
 
-    if (!object->d.comma)
+    object->d.titles[object->d.objects] = title;
+    object->d.objects++;
+    if (object->d.comma) {
+        fprintf(object->json, ",\n");
+    }
+    
+    if (object->d.isubclass) {
+        object->d.isubclasstart = false;
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
+    }
+
+    if (!object->d.comma) {
         object->d.comma = true;
+    }
 
     fprintf(object->json, "\t\"%s\" : ", title);
     fprintf(object->json, value ? "true" : "false");
@@ -114,17 +131,23 @@ int najp_addboolelement(const char title[], const bool value, najp* object) {
 }
 
 int najp_addnullelement(const char title[], najp* object) {
-    if (object->d.objects >= NAJP_LIMIT)
+    if (object->d.objects >= NAJP_LIMIT) {
         return NAJP_ELEMENT_LIMIT_REACHED;
-    for (int i = 0; i < sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
-        if (title == object->d.titles[i])
-            return NAJP_TITLE_ALREADY_IN_USE;
     }
+    for (int i = 0; i < sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+        if (title == object->d.titles[i]) {
+            return NAJP_TITLE_ALREADY_IN_USE;
+        }
+    }
+
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
-    if (object->d.comma)
+    if (object->d.comma) {
         fprintf(object->json, ",\n");
-    else object->d.comma = true;
+    } else {
+        object->d.comma = true;
+    }
+
     if (object->d.isubclass) {
         object->d.isubclasstart = false;
         for (int i = 0; i != object->d.parentsubclasses; i++) {
@@ -137,9 +160,11 @@ int najp_addnullelement(const char title[], najp* object) {
 
 int najp_addarray(const char title[], najp_array values[], const size_t valuesamt, najp* object) {
     for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
-        if (title == object->d.titles[i])
+        if (title == object->d.titles[i]) {
             return NAJP_TITLE_ALREADY_IN_USE;
+        }
     }
+
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
 
@@ -148,6 +173,7 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
     } else {
         fprintf(object->json, ",\n");
     }
+
     if (object->d.isubclass) {
         object->d.isubclasstart = false;
         fprintf(object->json, "\t");
@@ -155,10 +181,12 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
     fprintf(object->json, "\t\"%s\" : [\n", title);
 
     for (int i = 0; i != valuesamt; i++) {
-        if (i != 0)
+        if (i != 0) {
             fprintf(object->json, ",\n");
-        if (object->d.isubclass)
+        }
+        if (object->d.isubclass) {
             fprintf(object->json, "\t");
+        }
         if (!values[i].valueistring) {
             fprintf(object->json, "\t\t%s", values[i].value);
         } else {
@@ -173,14 +201,20 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
 }
 
 int najp_addsubclass(const char title[], najp* object) {
-    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++)
-        if (title == object->d.titles[i])
+    for (int i = 0; i != sizeof(object->d.titles) / sizeof(object->d.titles[0]); i++) {
+        if (title == object->d.titles[i]) {
             return NAJP_TITLE_ALREADY_IN_USE;
-    if (object->d.comma)
+        }
+    }
+
+    if (object->d.comma) {
         fprintf(object->json, ",\n");
-    if (object->d.parentsubclasses != 0)
-        for (int i = 0; i < object->d.parentsubclasses; i++)
+    }
+    if (object->d.parentsubclasses != 0) {
+        for (int i = 0; i < object->d.parentsubclasses; i++) {
             fprintf(object->json, "\t");
+        }
+    }
     fprintf(object->json, "\t\"%s\" : {\n", title);
 
     object->d.parentsubclasses++;
@@ -191,10 +225,12 @@ int najp_addsubclass(const char title[], najp* object) {
 }
 
 void najp_closesubclass(najp* object) {
-    if (!object->d.isubclasstart)
+    if (!object->d.isubclasstart) {
         fprintf(object->json, "\n");
-    for (int i = 0; i < object->d.parentsubclasses - 1; i++)
+    }
+    for (int i = 0; i < object->d.parentsubclasses - 1; i++) {
         fprintf(object->json, "\t");
+    }
     fprintf(object->json, "\t}");
     object->d.isubclass = false;
     object->d.isubclasstart = false;

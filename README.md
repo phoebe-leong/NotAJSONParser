@@ -1,5 +1,5 @@
 # NotAJSONParser
-A JSON generator written in C.  
+A JSON generator written in C. *For the C++ version head [here](https://github.com/phoebe-leong/NotAJSONParser_cpp)*  
 I was going to write a JSON parser to go along with it, but I ended up just giving up.  
 Check out [this other branch](https://github.com/phoebe-leong/NotAJSONParser/tree/console_out) that includes console output for easier debugging.
 

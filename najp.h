@@ -195,7 +195,7 @@ int najp_addnullelement(const char title[], najp* object) {
             fprintf(object->json, "\t");
         }
     }
-    fprintf(object->json, "\"%s\" : null", title);
+    fprintf(object->json, "\t\"%s\" : null", title);
 
     sleep(1);
     fprintf(text_green(stdout), "✓ Null element \"%s\" finished with no errors\n", title);
@@ -304,7 +304,7 @@ int najp_closesubclass(najp* object) {
     } else if (!object->d.isubclasstart) {
         fprintf(object->json, "\n");
     }
-    
+
     for (int i = 0; i < object->d.parentsubclasses - 1; i++) {
         fprintf(object->json, "\t");
     }
@@ -314,7 +314,7 @@ int najp_closesubclass(najp* object) {
     }
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
-    
+
     return NAJP_OK;
 }
 

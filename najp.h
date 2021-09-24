@@ -294,7 +294,7 @@ int najp_addsubclass(const char title[], najp* object) {
     return NAJP_OK;
 }
 
-void najp_closesubclass(najp* object) {
+int najp_closesubclass(najp* object) {
     if (!object->d.isubclass) {
         sleep(1);
         fprintf(text_red(stdout), "✗ Subclass closure finished with one error: NAJP_SUBCLASS_NOT_CURRENT\n");
@@ -314,6 +314,8 @@ void najp_closesubclass(najp* object) {
     }
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
+    
+    return NAJP_OK;
 }
 
 void najp_close(const najp* object) {

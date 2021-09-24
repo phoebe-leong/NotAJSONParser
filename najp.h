@@ -155,7 +155,7 @@ int najp_addnullelement(const char title[], najp* object) {
             fprintf(object->json, "\t");
         }
     }
-    fprintf(object->json, "\"%s\" : null", title);
+    fprintf(object->json, "\t\"%s\" : null", title);
     return NAJP_OK;
 }
 
@@ -235,16 +235,16 @@ int najp_addsubclass(const char title[], najp* object) {
 int najp_closesubclass(najp* object) {
     if (!object->d.isubclass) {
         return NAJP_SUBCLASS_NOT_CURRENT;
-    }
-
-    if (!object->d.isubclasstart) {
+    } else if (!object->d.isubclasstart) {
         fprintf(object->json, "\n");
     }
     for (int i = 0; i < object->d.parentsubclasses - 1; i++) {
         fprintf(object->json, "\t");
     }
     fprintf(object->json, "\t}");
-    object->d.isubclass = false;
+    if (object->d.parentsubclasses == 0) {
+        object->d.isubclass = false;
+    }
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
 

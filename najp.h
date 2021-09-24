@@ -11,6 +11,7 @@
 #define NAJP_OK 0
 #define NAJP_TITLE_ALREADY_IN_USE -1
 #define NAJP_ELEMENT_LIMIT_REACHED -2
+#define NAJP_SUBCLASS_NOT_CURRENT -3
 
 #define NAJP_LIMIT 10000
 
@@ -294,14 +295,23 @@ int najp_addsubclass(const char title[], najp* object) {
 }
 
 void najp_closesubclass(najp* object) {
-    if (!object->d.isubclasstart) {
+    if (!object->d.isubclass) {
+        sleep(1);
+        fprintf(text_red(stdout), "✗ Subclass closure finished with one error: NAJP_SUBCLASS_NOT_CURRENT\n");
+        reset_colors(stdout);
+
+        return NAJP_SUBCLASS_NOT_CURRENT;
+    } else if (!object->d.isubclasstart) {
         fprintf(object->json, "\n");
     }
+    
     for (int i = 0; i < object->d.parentsubclasses - 1; i++) {
         fprintf(object->json, "\t");
     }
     fprintf(object->json, "\t}");
-    object->d.isubclass = false;
+    if (object->d.parentsubclasses == 0) {
+        object->d.isubclass = false;
+    }
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
 }

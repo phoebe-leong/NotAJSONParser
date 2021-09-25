@@ -15,14 +15,6 @@
 
 #define NAJP_LIMIT 10000
 
-void najp_hjson() {
-    #ifdef NAJP_HJSON
-        #undef NAJP_HJSON
-    #else
-        #define NAJP_HJSON
-    #endif
-}
-
 struct najp_data {
     bool comma, isubclass, isubclasstart;
     int objects, parentsubclasses;
@@ -54,21 +46,6 @@ void najp_open(const char file[], najp* object) {
     reset_colors(stdout);
 }
 
-#ifdef NAJP_HJSON
-    void najp_addcomment(const char comment[], najp* object) {
-        if (object->d.isubclass) {
-            for (int i = 0; i != object->d.parentsubclasses; i++) {
-                fprintf(object->json, "\t");
-            }
-            fprintf(object->json, "\t# %s\n", comment);
-        }
-
-        sleep(1);
-        fprintf(text_green(stdout), "✓ Comment \"%s\" finished with no errors\n", comment);
-        reset_colors(stdout);
-    }
-#endif
-
 int najp_addstrelement(const char title[], const char value[], najp* object) {
     if (object->d.objects >= NAJP_LIMIT) {
         sleep(1);
@@ -89,11 +66,7 @@ int najp_addstrelement(const char title[], const char value[], najp* object) {
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
     if (object->d.comma) {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     }
 
     if (object->d.isubclass) {
@@ -132,11 +105,7 @@ int najp_addnumelement(const char title[], const double value, najp* object) {
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
     if (object->d.comma) {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     }
 
     if (object->d.isubclass) {
@@ -175,11 +144,7 @@ int najp_addboolelement(const char title[], const bool value, najp* object) {
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
     if (object->d.comma) {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     }
 
     if (object->d.isubclass) {
@@ -219,11 +184,7 @@ int najp_addnullelement(const char title[], najp* object) {
     object->d.titles[object->d.objects] = title;
     object->d.objects++;
     if (object->d.comma) {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     } else {
         object->d.comma = true;
     }
@@ -259,11 +220,7 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
     if (!object->d.comma) {
         object->d.comma = true;
     } else {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     }
 
     if (object->d.isubclass) {
@@ -276,11 +233,7 @@ int najp_addarray(const char title[], najp_array values[], const size_t valuesam
 
     for (int i = 0; i != valuesamt; i++) {
         if (i != 0) {
-            #ifdef NAJP_HJSON
-                fprintf(object->json, "\n");
-            #else
-                fprintf(object->json, ",\n");
-            #endif
+            fprintf(object->json, ",\n");
         }
 
         if (object->d.isubclass) {
@@ -321,11 +274,7 @@ int najp_addsubclass(const char title[], najp* object) {
     }
 
     if (object->d.comma) {
-        #ifdef NAJP_HJSON
-            fprintf(object->json, "\n");
-        #else
-            fprintf(object->json, ",\n");
-        #endif
+        fprintf(object->json, ",\n");
     }
 
     if (object->d.parentsubclasses != 0) {

@@ -3,20 +3,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "termcolor-c/termcolor-c.h"
+#include <unistd.h>
 
 #ifdef __cplusplus
-    #warning "Use of the C++ variant of NAJP, located at https://github.com/phoebe-leong/NotAJSONParser_cpp, is recommended
+    #warning "Use of the C++ variant of NAJP, located at https://github.com/phoebe-leong/NotAJSONParser_cpp/tree/console_out, is recommended
 #endif
 
 #define NAJP_OK 0
 #define NAJP_TITLE_ALREADY_IN_USE -1
 #define NAJP_ELEMENT_LIMIT_REACHED -2
 #define NAJP_SUBCLASS_NOT_CURRENT -3
+#define NAJP_INCORRECT_FILE_FORMAT -4
 
 #define NAJP_LIMIT 10000
 
 struct najp_data {
-    bool comma, isubclass, isubclasstart;
+    bool comma, isubclass, isubclasstart, hjson;
     int objects, parentsubclasses;
     const char* titles[NAJP_LIMIT + 1];
 };
@@ -31,6 +33,14 @@ typedef struct {
     struct najp_data d;
 } najp;
 
+void najp_hjson(najp* object) {
+    if (object->d.hjson) {
+        object->d.hjson = false;
+    } else {
+        object->d.hjson = true;
+    }
+}
+
 void najp_open(const char file[], najp* object) {
     object->json = fopen(file, "w");
 
@@ -44,6 +54,29 @@ void najp_open(const char file[], najp* object) {
     fputs("  ", stdout);
     fprintf(text_underline(stdout), "File \"%s\" opened ..\n", file);
     reset_colors(stdout);
+}
+
+int najp_addcomment(const char comment[], najp* object) {
+    if (!object->d.hjson) {
+        sleep(1);
+        fprintf(text_red(stdout), "✗ Comment \"%s\" finished with one error: NAJP_INCORRECT_FILE_FORMAT\n", comment);
+        reset_colors(stdout);
+
+        return NAJP_INCORRECT_FILE_FORMAT;
+    }
+
+    if (object->d.isubclass) {
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
+    }
+    fprintf(object->json, "\t# %s\n", comment);
+
+    sleep(1);
+    fprintf(text_green(stdout), "✓ Comment \"%s\" finished with no errors\n", comment);
+    reset_colors(stdout);
+
+    return NAJP_OK;
 }
 
 int najp_addstrelement(const char title[], const char value[], najp* object) {
@@ -314,6 +347,10 @@ int najp_closesubclass(najp* object) {
     }
     object->d.isubclasstart = false;
     object->d.parentsubclasses--;
+
+    sleep(1);
+    fprintf(text_green(stdout), "✓ Subclass closed with no errors\n");
+    reset_colors(stdout);
 
     return NAJP_OK;
 }

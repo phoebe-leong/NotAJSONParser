@@ -10,11 +10,12 @@
 #define NAJP_TITLE_ALREADY_IN_USE -1
 #define NAJP_ELEMENT_LIMIT_REACHED -2
 #define NAJP_SUBCLASS_NOT_CURRENT -3
+#define NAJP_INCORRECT_FILE_FORMAT -4
 
 #define NAJP_LIMIT 10000
 
 struct najp_data {
-    bool comma, isubclass, isubclasstart;
+    bool comma, isubclass, isubclasstart, hjson;
     int objects, parentsubclasses;
     const char* titles[NAJP_LIMIT + 1];
 };
@@ -29,6 +30,14 @@ typedef struct {
     struct najp_data d;
 } najp;
 
+void najp_hjson(najp* object) {
+    if (object->d.hjson) {
+        object->d.hjson = false;
+    } else {
+        object->d.hjson = true;
+    }
+}
+
 void najp_open(const char file[], najp* object) {
     object->json = fopen(file, "w");
 
@@ -36,6 +45,21 @@ void najp_open(const char file[], najp* object) {
     object->d.comma = false;
     object->d.objects = 0;
     object->d.parentsubclasses = 0;
+}
+
+int najp_addcomment(const char comment[], najp* object) {
+    if (!object->d.hjson) {
+        return NAJP_INCORRECT_FILE_FORMAT;
+    }
+
+    if (object->d.isubclass) {
+        for (int i = 0; i != object->d.parentsubclasses; i++) {
+            fprintf(object->json, "\t");
+        }
+    }
+
+    fprintf(object->json, "\t# %s\n", comment);
+    return NAJP_OK;
 }
 
 int najp_addstrelement(const char title[], const char value[], najp* object) {
